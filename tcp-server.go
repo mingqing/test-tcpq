@@ -40,13 +40,21 @@ func main() {
 		for {
 			if writeData || readData {
 				if writeData {
-					conn.Write([]byte("0123456789"))
-					fmt.Println("send 10 byte to", conn.RemoteAddr())
+					fmt.Println("start write")
+					n, err := conn.Write([]byte("0123456789"))
+					if err != nil {
+						fmt.Println("write err", err)
+					}
+					fmt.Println("send", n, "byte to", conn.RemoteAddr())
 				}
 				if readData {
+					fmt.Println("start read")
 					buf := make([]byte, 10)
-					conn.Read(buf)
-					fmt.Println("read 10 byte:", string(buf), "from", conn.RemoteAddr())
+					n, err := conn.Read(buf)
+					if err != nil {
+						fmt.Println("read err", err)
+					}
+					fmt.Println("read", n, "byte:", string(buf), "from", conn.RemoteAddr())
 				}
 			} else {
 				fmt.Println("waiting", interval, "nanosecond")
